@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, Text, View, StatusBar, ToolbarAndroid, Platform, FlatList } from 'react-native';
 
-export default class App extends React.Component {
+import {Toolbar} from './common/toolbar/Toolbar';
+
+export default class App extends Component {
 
   constructor() {
     super();
@@ -10,8 +12,11 @@ export default class App extends React.Component {
     };
   }
 
+  currentOSisIos() {
+    return Platform.OS === 'ios';
+  }
   componentDidMount() {
-    return fetch('http://[change me to your local ip]:9000/musics')
+    return fetch('http://192.168.1.159:9000/musics')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -26,12 +31,8 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ToolbarAndroid
-          title="AwesomeApp"
-          style={styles.toolbar}
-          actions={[{title: 'Settings', show: 'always'}]}
-        />
-      <Text style={styles.columnHeaders}>Song, Artist, Album</Text>
+        <Toolbar/>
+        <Text style={styles.columnHeaders}>Song, Artist, Album</Text>
         <FlatList
           data={this.state.data}
           renderItem={
@@ -46,7 +47,8 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
+    paddingTop: Platform.OS === 'ios' ? 10 : StatusBar.currentHeight
+    // paddingTop: 20
   },
   toolbar: {
     height: 50,
